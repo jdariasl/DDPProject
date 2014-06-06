@@ -12,8 +12,7 @@ shinyUI(fluidPage(
                   
       radioButtons("DisType", h3("Type of Distribution"), 
                   list("Normal" = "norm",
-                        "Log-normal" = "lnorm",
-                        "Gamma" = "gamma"),
+                        "Log-normal" = "lnorm"),
                    selected = "norm"),            
       
      radioButtons("Nmixtures", h3("Number of Mixtures"),
@@ -25,16 +24,16 @@ shinyUI(fluidPage(
                     condition = "input.Nmixtures == 'M1'",
                     numericInput("Mean1", 
                                  label = h4("Mean component  1"), 
-                                 value = 1)),
+                                 value = 0)),
           conditionalPanel(
                     condition = "input.Nmixtures == 'M2'",
                     numericInput("Mean1", 
                                   label = h4("Mean component 1"), 
-                                  value = 1),
+                                  value = -5),
                     
                     numericInput("Mean2", 
                                  label = h4("Mean component 2"), 
-                                 value = -5)),
+                                 value = 5)),
       
           conditionalPanel(
                     condition = "input.Nmixtures == 'M3'",
@@ -73,9 +72,9 @@ shinyUI(fluidPage(
       
       plotOutput("distPlot2"),
       
-      plotOutput("distPlot3")
+      plotOutput("distPlot3"),
       
-      #plotOutput("distPlot4")
+      plotOutput("distPlot4")
       
     )
   )
