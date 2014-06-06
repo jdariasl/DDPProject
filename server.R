@@ -1,5 +1,5 @@
 library(shiny)
-library(shinyRGL)
+#library(shinyRGL) # I was trying to do something in 3D
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
   
@@ -14,7 +14,6 @@ shinyServer(function(input, output) {
     dist <- switch(input$DisType,
                    norm = rnorm,
                    lnorm = rlnorm,
-                   gamma = rgamma,
                    rnorm)
     
     samples <- switch(input$Nmixtures,
@@ -58,15 +57,35 @@ shinyServer(function(input, output) {
     
   })
   
-  output$distPlot3 <- renderWebGL({
-    tem <- seq(-10,10,length=input$n)
-    z <- matrix(0,length(tem),length(tem))
-    for (i in 1:length(tem)) {
-      for (j in 1:length(tem)) {
-        z[i,j] <- 3*sin(2*pi*tem[i] + tem[j]) - 2*tem[j]^2 + tem[i]*tem[j]
-      }
-    }
-   rgl.surface(tem,tem,z)
+  data3 <- reactive({
+        tem <- seq(-4,4,length=2*input$n)
+        datos <- 2*sin(2*pi*tem)*exp(-tem/5) + 0.5*rnorm(input$n)
+        tem3 <- cbind(tem,datos)
+        return(tem3)
+        })
+  
+  
+  
+  output$distPlot3 <- renderPlot({
+    tem <- data3()
+    plot(tem[,1],tem[,2], type = "p", main = "Original Data")
   })
+  
+  output$distPlot4 <- renderPlot({
+    tem <- data3()
+    tem2 <- seq(-4,4,length=input$n)
+    y <- matrix(0,1,input$n)
+    for (i in 1:length(tem2)) {
+      num <- 0
+      den <- 0
+      for (j in 1:length(tem[,1])) {
+        num <- num + exp(-0.5*(tem2[i]-tem[j,1])^2/(input$h^2))*tem[j,2]
+        den <- den + exp(-0.5*(tem2[i]-tem[j,1])^2/(input$h^2))
+      }
+      y[i] <- num/den
+    }
+    plot(tem2,y, type = "l", main = "Nadaraya-Watson Estimator")
+  })
+  
   
 })
