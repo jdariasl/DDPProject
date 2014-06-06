@@ -1,5 +1,5 @@
 library(shiny)
-#library(shinyRGL) # I was trying to do something in 3D
+#library(shinyRGL) I was trying to do something in 3D
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
   
@@ -58,8 +58,8 @@ shinyServer(function(input, output) {
   })
   
   data3 <- reactive({
-        tem <- seq(-4,4,length=2*input$n)
-        datos <- 2*sin(2*pi*tem)*exp(-tem/5) + 0.5*rnorm(input$n)
+        tem <- seq(-4,4,length=2*input$n2)
+        datos <- 2*sin(2*pi*tem)*exp(-tem/5) + 0.5*rnorm(input$n2)
         tem3 <- cbind(tem,datos)
         return(tem3)
         })
@@ -73,14 +73,14 @@ shinyServer(function(input, output) {
   
   output$distPlot4 <- renderPlot({
     tem <- data3()
-    tem2 <- seq(-4,4,length=input$n)
-    y <- matrix(0,1,input$n)
+    tem2 <- seq(-4,4,length=input$n2)
+    y <- matrix(0,1,input$n2)
     for (i in 1:length(tem2)) {
       num <- 0
       den <- 0
       for (j in 1:length(tem[,1])) {
-        num <- num + exp(-0.5*(tem2[i]-tem[j,1])^2/(input$h^2))*tem[j,2]
-        den <- den + exp(-0.5*(tem2[i]-tem[j,1])^2/(input$h^2))
+        num <- num + exp(-0.5*(tem2[i]-tem[j,1])^2/(input$h2^2))*tem[j,2]
+        den <- den + exp(-0.5*(tem2[i]-tem[j,1])^2/(input$h2^2))
       }
       y[i] <- num/den
     }
