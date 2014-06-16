@@ -42,7 +42,7 @@ shinyServer(function(input, output) {
     bins <- seq(min(data()) - 1, max(data()) + 1, length.out = input$bins + 1)
     
     # draw the histogram with the specified number of bins
-    hist(data(), breaks = bins, col = 'darkgray', border = 'white')
+    hist(data(), breaks = bins, col = 'skyblue', border = 'white')
    
    })
   
