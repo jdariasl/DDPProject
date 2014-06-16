@@ -3,19 +3,14 @@ library(shiny)
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
   
-  # Expression that generates a histogram. The expression is
-  # wrapped in a call to renderPlot to indicate that:
-  #
-  #  1) It is "reactive" and therefore should re-execute automatically
-  #     when inputs change
-  #  2) Its output type is a plot
+  # Expression that generates a histogram. 
   
   data <- reactive({  set.seed(10)
     dist <- switch(input$DisType,
                    norm = rnorm,
                    lnorm = rlnorm,
                    rnorm)
-    
+    # The number of points is split equally into the number of components in the mixture
     samples <- switch(input$Nmixtures,
               M1 = {dist(input$n,input$Mean1)},
               M2 = {N <- ceiling(input$n/2)
@@ -26,7 +21,7 @@ shinyServer(function(input, output) {
     return(samples)
   })
   
-  
+  # Kernel density estimation
   data2 <-reactive({
     datos <- data()
     tem <- seq(min(datos) - 1,max(datos) + 1,length=input$n)
@@ -57,6 +52,7 @@ shinyServer(function(input, output) {
     
   })
   
+  # Generation of the "real" data for the regression exercise
   data3 <- reactive({
         tem <- seq(-4,4,length=2*input$n2)
         datos <- 2*sin(2*pi*tem)*exp(-tem/5) + 0.5*rnorm(input$n2)
@@ -71,6 +67,7 @@ shinyServer(function(input, output) {
     plot(tem[,1],tem[,2], type = "p", main = "Original Data")
   })
   
+  # Nadaraya-Watson estimator 
   output$distPlot4 <- renderPlot({
     tem <- data3()
     tem2 <- seq(-4,4,length=input$n2)
