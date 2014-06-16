@@ -4,7 +4,7 @@ library(shiny)
 shinyUI(fluidPage(
   
   # Application title
-  titlePanel("Lab Introduction to Non-parametric Statistical Models"),
+  titlePanel("Introduction to Non-parametric Statistical Models"),
   
   hr(),
   
